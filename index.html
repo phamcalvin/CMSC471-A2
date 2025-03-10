@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labs 4 & 5: Interactive Data Visualization with D3.js</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+
+</head>
+<body>
+    <div class="container"> <!-- Centers content and sets max width -->
+        <h1>Labs 4 & 5: Interactive Data Visualization with D3.js</h1>
+        <p>The gapminder dataset captures economic and social indicators for most countries over time. To use this tool 
+            you can specify the year using the slider below. To view different statistics compared to each other, use the 
+            dropdowns below. To specify the bubble size, you may use the right dropdown. You can hover over each bubble to 
+            view each country. <br> As we can see, the African continent tends to have a lower life expectancy than other countries.
+        </p>
+        <div class="controls">
+            <p id="value"></p>
+            <div id="slider"></div>
+            X: <select id="xVariable" class="variable"></select>
+            Y: <select id="yVariable" class="variable"></select>
+            size: <select id="sizeVariable" class="variable"></select>
+        </div>
+        <div id="vis"></div>
+        <div id="tooltip" style="display:none"></div> 
+    </div>
+    
+    <!-- Load D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -116,13 +116,15 @@ function init() {
       colorScale = d3.scaleOrdinal([...options], [...allColors]);
 
       allData = data;
-      selectedTypes = options;
+      selectedTypes = new Set(["ALL"]);
 
       setupSelector();
       // Initial rendering steps:
       updateAxes();
       updateVis();
       updateLegend();
+
+      document.querySelector("#load").textContent = ""; //clear the waiting text
     })
     .catch((error) => console.error("Error loading data:", error));
 }
@@ -141,8 +143,6 @@ function setupSelector() {
         .text((d) => d)
         .attr("value", (d) => d);
     })
-
-    //TODO
 
     .on("change", function (event) {
       if (d3.select(this).property("id") === "") {
@@ -171,7 +171,7 @@ function setupSelector() {
     checkbox.value = lst[i - 1]; // type;
     checkbox.id = "checkbox" + i;
     checkbox.className = "checkbox";
-    checkbox.checked = true;
+    checkbox.checked = (lst[i-1] === "ALL" ? true : false);
     // creating label for checkbox
     let label = document.createElement("label");
     // assigning attributes for the created label tag

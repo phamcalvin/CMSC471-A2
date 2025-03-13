@@ -1,6 +1,6 @@
 const margin = { top: 40, right: 40, bottom: 40, left: 60 };
 const width = 800 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
+const height = 800 - margin.top - margin.bottom;
 
 const svg = d3
   .select("#vis")
@@ -20,7 +20,10 @@ const line = d3
   .x((d) => xScale(d.year))
   .y((d) => yScale(d.count));
 
-let xScale = d3.scaleLinear().domain([2001, 2025]).range([0, width]);
+let xScale = d3
+  .scaleLinear()
+  .domain([2001, 2025])
+  .range([0, width - 170]);
 
 let yScale = d3.scaleLinear().domain([0, 500000]).range([height, 0]);
 
@@ -29,6 +32,45 @@ const crimeCounts = {};
 let yVar = "ALL"; //maybe turn this into an array to read multiple values
 const t = 1000; // 1000ms = 1 second
 let selectedTypes = options;
+
+const allColors = [
+  "#000000",
+  "#ff7f0e",
+  "#2ca02c",
+  "#d62728",
+  "#9467bd",
+  "#8c564b",
+  "#e377c2",
+  "#7f7f7f",
+  "#bcbd22",
+  "#17becf",
+  "#aec7e8",
+  "#ffbb78",
+  "#98df8a",
+  "#ff9896",
+  "#c5b0d5",
+  "#c49c94",
+  "#f7b6d2",
+  "#c7c7c7",
+  "#dbdb8d",
+  "#9edae5",
+  "#393b79",
+  "#637939",
+  "#8c6d31",
+  "#843c39",
+  "#7b4173",
+  "#5254a3",
+  "#6b6ecf",
+  "#b5cf6b",
+  "#e7ba52",
+  "#e7969c",
+  "#31a354",
+  "#756bb1",
+  "#636363",
+  "#d6616b",
+  "#ce6dbd",
+  "#e6550d",
+];
 
 function init() {
   d3.csv("./data/chicago_crime.csv", (d) => {
@@ -70,47 +112,7 @@ function init() {
       ); //Format data to be passed into d3
       console.log(formatted);
 
-      colorScale = d3.scaleOrdinal(
-        [...options],
-        [
-          "#000000",
-          "#ff7f0e",
-          "#2ca02c",
-          "#d62728",
-          "#9467bd",
-          "#8c564b",
-          "#e377c2",
-          "#7f7f7f",
-          "#bcbd22",
-          "#17becf",
-          "#aec7e8",
-          "#ffbb78",
-          "#98df8a",
-          "#ff9896",
-          "#c5b0d5",
-          "#c49c94",
-          "#f7b6d2",
-          "#c7c7c7",
-          "#dbdb8d",
-          "#9edae5",
-          "#393b79",
-          "#637939",
-          "#8c6d31",
-          "#843c39",
-          "#7b4173",
-          "#5254a3",
-          "#6b6ecf",
-          "#b5cf6b",
-          "#e7ba52",
-          "#e7969c",
-          "#31a354",
-          "#756bb1",
-          "#636363",
-          "#d6616b",
-          "#ce6dbd",
-          "#e6550d",
-        ]
-      );
+      colorScale = d3.scaleOrdinal([...options], [...allColors]);
 
       allData = data;
       selectedTypes = options;
@@ -152,13 +154,20 @@ function setupSelector() {
     });
 
   const parent = document.getElementById("checkboxes");
-  let i = 1;
+  var r = document.querySelector(":root");
 
-  for (let type of options) {
+  //   for (let x = 1; x <= allColors.length; x++) {
+  //     r.style.setProperty("--custom-color" + x, allColors[x - 1]);
+  //   }
+  const lst = [...options];
+
+  for (let i = 1; i <= lst.length; i++) {
+    //type of options) {
     let checkbox = document.createElement("input");
+    r.style.setProperty("--curr-color", allColors[i - 1]);
     checkbox.type = "checkbox";
     checkbox.name = "checkbox" + i;
-    checkbox.value = type;
+    checkbox.value = lst[i - 1]; // type;
     checkbox.id = "checkbox" + i;
     checkbox.className = "checkbox";
     checkbox.checked = true;
@@ -166,12 +175,11 @@ function setupSelector() {
     let label = document.createElement("label");
     // assigning attributes for the created label tag
     label.htmlFor = "checkbox" + i;
-    label.appendChild(document.createTextNode(type));
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(lst[i - 1]));
 
-    parent.appendChild(checkbox);
     parent.appendChild(label);
     //d3.select("#checkbox" + i).on("change", updateCheckboxes());
-    i += 1;
   }
 
   d3.selectAll(".checkbox").on("change", function () {
@@ -212,7 +220,7 @@ function updateAxes() {
   //axes lables
   svg
     .append("text")
-    .attr("x", width / 2)
+    .attr("x", (width - 150) / 2)
     .attr("y", height + margin.bottom - 5)
     .attr("text-anchor", "middle")
     .text("Year") // Displays the current x-axis variable
@@ -310,29 +318,38 @@ function updateLegend() {
   svg.selectAll(".crimeSquare").remove();
   svg.selectAll(".crimeName").remove();
 
-  let size = 10;
+  let names = [...selectedTypes];
+  console.log(names);
+  for (let i = 0; i < names.length; i++) {
+    if (names[i].length > 20) {
+      names[i] = names[i].substring(0, 20) + "...";
+      console.log(names[i]);
+    }
+  }
+
+  let size = 7;
   svg
     .selectAll("crimeSquare")
     .data([...selectedTypes])
     .enter()
     .append("rect")
-    .attr("y", (d, i) => i * (size + 10) - 30)
-    .attr("x", 600)
-    .attr("width", 10)
-    .attr("height", 10)
+    .attr("y", (d, i) => i * (size + 7) - 25)
+    .attr("x", 550)
+    .attr("width", 7)
+    .attr("height", 7)
     .attr("class", "crimeSquare")
     .style("fill", (d) => colorScale(d));
 
   svg
     .selectAll("crimeName")
-    .data([...selectedTypes])
+    .data([...names])
     .enter()
     .append("text")
-    .attr("y", (d, i) => i * (size + 10) + size - 30)
-    .attr("x", 600 + size)
+    .attr("y", (d, i) => i * (size + 7) + size - 25)
+    .attr("x", 550 + size)
     .style("fill", (d) => colorScale(d))
     .text((d) => d)
     .attr("text-anchor", "left")
     .attr("class", "crimeName")
-    .style("font-size", "13px");
+    .style("font-size", "11px");
 }

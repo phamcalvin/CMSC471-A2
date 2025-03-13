@@ -1,4 +1,8 @@
 /* Reset default styles */
+:root {
+  --curr-color: #1e90ff;
+}
+
 * {
   font-family: Arial, sans-serif;
   max-width: 800px;
@@ -18,15 +22,55 @@
   border: 1px solid #ccc; /*otherwise you can't see this part*/
 }
 
-.checkboxes {
+#checkboxes {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
 }
 
 input[type="checkbox"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
 }
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #1e90ff;
+
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em);
+}
+
 label {
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+  align-items: center;
+  font-size:.8rem;
 }
 
 .x-axis path,

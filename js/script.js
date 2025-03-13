@@ -26,13 +26,13 @@ let xScale = d3
   .range([0, width - 170]);
 
 let yScale = d3.scaleLinear().domain([0, 500000]).range([height, 0]);
+let ymax = 0;
 
 let options = new Set(["ALL"]);
 const crimeCounts = {};
 let yVar = "ALL"; //maybe turn this into an array to read multiple values
 const t = 1000; // 1000ms = 1 second
 let selectedTypes = options;
-let ymax = 500000;
 
 const allColors = [
   "#000000",
@@ -229,12 +229,10 @@ function updateAxes() {
 
   //Change y axis scale from 500k to 100k if all is not selected
 
-  let ymax = 0;
-  if (yVar !== "ALL") {
-    for (let x of formatted) {
-      if (selectedTypes.has(x.primType) && x.count > ymax) {
-        ymax = x.count;
-      }
+  ymax = 0;
+  for (let x of formatted) {
+    if (selectedTypes.has(x.primType) && x.count > ymax) {
+      ymax = x.count;
     }
   }
 
@@ -276,7 +274,6 @@ function updateVis() {
       .attr("d", line)
       .attr("pointer-events", "visibleStroke")
       .on("mouseover", function (mouse) {
-        console.log(mouse);
         const [x_cord, y_cord] = d3.pointer(mouse);
         const xratio = x_cord / (width - 170);
         const yratio = y_cord / height;

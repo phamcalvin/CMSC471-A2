@@ -23,7 +23,39 @@
         </div>
 
         <h2>Write-up</h2>
-        <p><!-- WRITE UP HERE --></p>
+
+        <h3>Intro</h3>
+            <p>This dataset was taken from Chicago Police Departments's CLEAR program. 
+                In this database, there are all instances of crime reported in Chicago 
+                from 2001 to the present day. For each report, we looked into the year
+                and type of crime committed. </br></br> </p>
+
+        <h3>Design Decisions</h3>
+            <p>We allow the user to highlight each line (type) on the graph to see more info
+            on how many reports were there on that year. We also allow the user to filter 
+            certain types of crimes by using checkboxes at the bottom. We ended up picking
+            a line graph as we it felt like the standard for comparing data over time. Line
+            graphs would also make it easy for the user to compare trends. We considered taking 
+            other subsets of data and visualize using bar charts. One approach we thought of 
+            was comparing districts and crime rates. We ultimately decided to pick a line graph
+            since we wanted to show trends over time. </br> </br></p>
+
+        
+        <h3>Reference to data: <a href="https://data.cityofchicago.org/stories/s/Crimes-2001-to-present-Dashboard/5cd6-ry5g ">here</a></h3> </br>
+        
+        <h3>Development Process</h3>
+            <p>Work was split among team members via communication and updates on what needed to be 
+                done. We both took time seperately to work on the project and push to the repository 
+                while the other waited. We could have been more efficient at working concurrently, 
+                however we did not split up the tasks formally. We also ran into an issue of working 
+                on the project at the same time and pushing two different versions. We roughly spent 10
+                hours on this project so far, and the longest part was figuring out how to draw the lines.
+            </p> </br>
+        
+        <h3>Summary of AI</h3>
+        <p>We used ChatGPT to give us an example of line graphing in d3. We also asked it to create a list
+            of colors for us to use.
+        </p>
         <script src="https://d3js.org/d3.v7.min.js"></script>
         <script src="js/script.js"></script>
 </body>

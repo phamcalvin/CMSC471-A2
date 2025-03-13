@@ -70,7 +70,7 @@ label {
   grid-template-columns: 1em auto;
   gap: 0.5em;
   align-items: center;
-  font-size:.8rem;
+  font-size: 0.8rem;
 }
 
 .x-axis path,

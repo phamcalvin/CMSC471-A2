@@ -1,6 +1,6 @@
-const margin = { top: 40, right: 40, bottom: 40, left: 60 };
+const margin = { top: 40, right: 40, bottom: 40, left: 70 };
 const width = 800 - margin.left - margin.right;
-const height = 800 - margin.top - margin.bottom;
+const height = 650 - margin.top - margin.bottom;
 
 const svg = d3
   .select("#vis")
@@ -32,6 +32,7 @@ const crimeCounts = {};
 let yVar = "ALL"; //maybe turn this into an array to read multiple values
 const t = 1000; // 1000ms = 1 second
 let selectedTypes = options;
+let ymax = 500000;
 
 const allColors = [
   "#000000",
@@ -227,9 +228,19 @@ function updateAxes() {
     .attr("class", "labels");
 
   //Change y axis scale from 500k to 100k if all is not selected
+
+  let ymax = 0;
+  if (yVar !== "ALL") {
+    for (let x of formatted) {
+      if (selectedTypes.has(x.primType) && x.count > ymax) {
+        ymax = x.count;
+      }
+    }
+  }
+
   yScale = d3
     .scaleLinear()
-    .domain([0, yVar === "ALL" ? 500000 : 100000])
+    .domain([0, yVar === "ALL" ? 500000 : ymax])
     .range([height, 0]);
 
   const yAxis = d3.axisLeft(yScale);
@@ -262,7 +273,39 @@ function updateVis() {
       .attr("stroke", colorScale(crime))
       .attr("stroke-width", 2)
       .attr("class", "lines")
-      .attr("d", line);
+      .attr("d", line)
+      .attr("pointer-events", "visibleStroke")
+      .on("mouseover", function (mouse) {
+        console.log(mouse);
+        const [x_cord, y_cord] = d3.pointer(mouse);
+        const xratio = x_cord / (width - 170);
+        const yratio = y_cord / height;
+        const current_year = 2001 + Math.round(xratio * (2025 - 2001));
+        const current_count = ymax - Math.round(yratio * ymax);
+        d3.select("#tooltip")
+          // if you change opacity to hide it, you should also change opacity here
+          .style("display", "block") // Make the tooltip visible
+          .html(
+            // Change the html content of the <div> directly
+            `<strong>${current_year}</strong><br/>
+        Count: ${current_count}`
+          )
+          .style("left", event.pageX + 20 + "px")
+          .style("top", event.pageY - 28 + "px");
+
+        // d3.select(this)
+        //   .style("fill", d3.select(this).attr("stroke"))
+        //   .attr("fill-opacity", 0.3);
+
+        d3.select(this).style("stroke-width", "4px");
+      })
+      .on("mouseout", function (d) {
+        d3.select("#tooltip").style("display", "none"); // Hide tooltip when cursor leaves
+        d3.select(this)
+          .style("fill", "none")
+          .attr("fill-opacity", 1)
+          .style("stroke-width", "2px");
+      });
   });
 
   //   let tmp = [];

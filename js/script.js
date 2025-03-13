@@ -27,6 +27,7 @@ let xScale = d3
 
 let yScale = d3.scaleLinear().domain([0, 500000]).range([height, 0]);
 let ymax = 0;
+let names;
 
 let options = new Set(["ALL"]);
 const crimeCounts = {};
@@ -117,6 +118,7 @@ function init() {
 
       allData = data;
       selectedTypes = new Set(["ALL"]);
+      names = [...selectedTypes];
 
       setupSelector();
       // Initial rendering steps:
@@ -171,7 +173,7 @@ function setupSelector() {
     checkbox.value = lst[i - 1]; // type;
     checkbox.id = "checkbox" + i;
     checkbox.className = "checkbox";
-    checkbox.checked = (lst[i-1] === "ALL" ? true : false);
+    checkbox.checked = lst[i - 1] === "ALL" ? true : false;
     // creating label for checkbox
     let label = document.createElement("label");
     // assigning attributes for the created label tag
@@ -201,6 +203,13 @@ function setupSelector() {
       }
     }
 
+    names = [...selectedTypes];
+    for (let i = 0; i < names.length; i++) {
+      if (names[i].length > 20) {
+        names[i] = names[i].substring(0, 20) + "...";
+      }
+    }
+
     updateAxes();
     updateVis();
     updateLegend();
@@ -215,7 +224,7 @@ function updateAxes() {
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(xScale).ticks(12))
+    .call(d3.axisBottom(xScale).ticks(12).tickFormat(d3.format("d")))
     .attr("class", "axis");
 
   //axes lables
@@ -278,7 +287,7 @@ function updateVis() {
         const xratio = x_cord / (width - 170);
         const yratio = y_cord / height;
         const current_year = 2001 + Math.round(xratio * (2025 - 2001));
-        const current_count = ymax - Math.round(yratio * ymax);
+        const current_count = Math.round((ymax - yratio * ymax) / 100) / 10;
         d3.select("#tooltip")
           // if you change opacity to hide it, you should also change opacity here
           .style("display", "block") // Make the tooltip visible
@@ -286,7 +295,7 @@ function updateVis() {
             // Change the html content of the <div> directly
             `
             <strong>${current_year} - ${crime}</strong><br/>
-        Count: ${current_count}`
+        Count: ${current_count}k`
           )
           .style("left", event.pageX + 20 + "px")
           .style("top", event.pageY - 28 + "px");
@@ -359,15 +368,6 @@ function updateLegend() {
   svg.selectAll(".crimeSquare").remove();
   svg.selectAll(".crimeName").remove();
 
-  let names = [...selectedTypes];
-  console.log(names);
-  for (let i = 0; i < names.length; i++) {
-    if (names[i].length > 20) {
-      names[i] = names[i].substring(0, 20) + "...";
-      console.log(names[i]);
-    }
-  }
-
   let size = 7;
   svg
     .selectAll("crimeSquare")
@@ -383,13 +383,13 @@ function updateLegend() {
 
   svg
     .selectAll("crimeName")
-    .data([...names])
+    .data([...selectedTypes])
     .enter()
     .append("text")
     .attr("y", (d, i) => i * (size + 7) + size - 25)
     .attr("x", 550 + size)
-    .style("fill", (d) => colorScale(d))
-    .text((d) => d)
+    .style("fill", (d, i) => colorScale(d))
+    .text((d, i) => [...names][i])
     .attr("text-anchor", "left")
     .attr("class", "crimeName")
     .style("font-size", "11px");

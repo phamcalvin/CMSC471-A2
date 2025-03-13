@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <title>Assignment 2: Interactive Visualization</title>
     <link rel="stylesheet" href="css/styles.css">
 
@@ -14,47 +19,93 @@
     <div id="tooltip" style="display:none"></div>
     <div class="container"> <!-- Centers content and sets max width -->
         <h1>Assignment 2: Interactive Visualization</h1>
+        <h2>Frequency of Crime Types in Chicago Over Time</h2>
+
         <p id="load">Please wait while the data loads...</p>
         <div id="vis"></div>
 
         <div class="controls">
             <h3>Filter by type of crime:</h3>
             <div id="checkboxes"></div>
-        </div>
+        </div><br>
 
-        <h2>Write-up</h2>
+        <hr><br>
+        <h2>Write-up</h2><br>
 
         <h3>Intro</h3>
-            <p>This dataset was taken from Chicago Police Departments's CLEAR program. 
-                In this database, there are all instances of crime reported in Chicago 
-                from 2001 to the present day. For each report, we looked into the year
-                and type of crime committed. </br></br> </p>
+        <p>This dataset was taken from Chicago Police Departments's CLEAR program.
+            In this database, there are all instances of crime reported in Chicago
+            from 2001 to the present day. For each report, we looked into the year
+            and amount of each type of crime committed (eg. theft, burglary, etc). Our goal was to visualize the crime
+            count over time, categorized by the type.</br></br> </p>
 
         <h3>Design Decisions</h3>
-            <p>We allow the user to highlight each line (type) on the graph to see more info
-            on how many reports were there on that year. (Category 2) We also allow the user to filter 
-            certain types of crimes by using checkboxes at the bottom. (Category 1) We ended up picking
-            a line graph as we it felt like the standard for comparing data over time. Line
-            graphs would also make it easy for the user to compare trends. We considered taking 
-            other subsets of data and visualize using bar charts. One approach we thought of 
+        <p>We ended up picking
+            a line graph as is it is quite effective in comparing data over time. Line
+            graphs would also make it easy for the user to compare trends. We considered taking
+            other subsets of data and visualize using bar charts; one approach we thought of
             was comparing districts and crime rates. We ultimately decided to pick a line graph
-            since we wanted to show trends over time. </br> </br></p>
+            since we wanted to show trends over time.<br /><br />
 
-        
-        <h3>Reference to data: <a href="https://data.cityofchicago.org/stories/s/Crimes-2001-to-present-Dashboard/5cd6-ry5g ">here</a></h3> </br>
-        
+            <i>Required features</i>:<br> We allow the user to highlight each line (type) on the graph to see more info
+            on how many reports were there on that year. (Category 2) We also allow the user to filter
+            certain types of crimes by using checkboxes at the bottom. (Category 1)<br /><br />
+
+            <i>Discussion</i>:<br>
+            In particular, we felt that it would be most helpful for users to be able to compare trends of different
+            crimes over time, and also compare them with the overall trend in all crimes. For this, we decided to add
+            checkboxes for users to select the crimes they wanted to view, which also helps with decluttering the data.
+            We implemented a scaling y-axis that adjusts based on the max of the data currently selected, so this allows
+            users to more clearly observe trends within crimes that are less frequent without sacrificing the ability to
+            analyze all of the different crime types. Along similar lines (get it? 😊), we also made sure our tooltip
+            provided the
+            crime count number at an appropriate scale so as to not include too much information (the exact total) while
+            also
+            still providing a number in the thousands to show the extra detail.<br /><br />
+
+            For more specific elements of the chart interface, considering the issue that dual axis charts have of the
+            drastic impact of axis scales, we decided that the scaling y-axis would help mitigate this because of the
+            variety of views that the users can generate. This would help the user get a more general sense of the crime
+            trends in the context of several other categories to avoid any dramatic bias.<br /><br />
+
+            We also decided to add a tooltip selection (elaboration) by considering the user's desire to evaluate the
+            information, as
+            in Bloom's taxonomy for learning. Showing the exact counts within each line helps the user put its magnitude
+            both within the context of the same crime and different crimes, while cross-comapring within different years
+            as well if they would like.<br /><br />
+
+            <i>Reflections:</i><br>Overall, we found this assignment to be challenging to implement because of how we
+            had to incorporate
+            our
+            intended design using the very high-level methods that d3 provides. However, we found existing documentation
+            to
+            be very helpful in figuring out issues. We believe we were successful in creating a highly customizable,
+            clean visualization that
+            effectively showcases visual comparisons of trends in crime.
+            </br> </br>
+        </p>
+
+
+        <h3>Reference to data: <a
+                href="https://data.cityofchicago.org/stories/s/Crimes-2001-to-present-Dashboard/5cd6-ry5g">here</a>
+        </h3> </br>
+
         <h3>Development Process</h3>
-            <p>Work was split among team members via communication and updates on what needed to be 
-                done. We both took time seperately to work on the project and push to the repository 
-                while the other waited. We could have been more efficient at working concurrently, 
-                however we did not split up the tasks formally. We also ran into an issue of working 
-                on the project at the same time and pushing two different versions. We roughly spent 15 
-                (Candace: 8, Calvin: 7) hours on this project so far, and the longest part was figuring 
-                out how to draw the lines.
-            </p> </br>
-        
+        <p>Work was split among team members via communication and updates on what needed to be
+            done. We both took time seperately to work on the project and push to the repository
+            while the other waited. We could have been more efficient at working concurrently,
+            however we did not split up the tasks formally. We also ran into an issue of working
+            on the project at the same time and pushing two different versions. We roughly spent 15
+            (Candace: 8, Calvin: 7) hours on this project so far, and the longest part was figuring
+            out how to draw the lines, particularly because of the data format by year and grouped by type. We found the
+            selection.data and selection.join functions to be complex for this purpose, and unfortunately could not
+            figure out how to implement more transitions with join. Time was
+            also spent formatting the rows of checkboxes and legends to fit appropriately and look nice.
+        </p> </br>
+
         <h3>Summary of AI</h3>
-        <p>We used ChatGPT to give us an example of line graphing in d3. We also asked it to create a list
+        <p>We used ChatGPT to give us an example of line graphing in d3, which was initially referenced. We also asked
+            it to create a list
             of colors for us to use.
         </p>
         <script src="https://d3js.org/d3.v7.min.js"></script>

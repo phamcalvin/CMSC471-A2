@@ -284,7 +284,8 @@ function updateVis() {
           .style("display", "block") // Make the tooltip visible
           .html(
             // Change the html content of the <div> directly
-            `<strong>${current_year}</strong><br/>
+            `
+            <strong>${current_year} - ${crime}</strong><br/>
         Count: ${current_count}`
           )
           .style("left", event.pageX + 20 + "px")
